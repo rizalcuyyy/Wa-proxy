@@ -1,12 +1,18 @@
 export default {
   async fetch(request) {
     const url = new URL(request.url);
-    url.hostname = "chatproxies.whatsapp.net";
-    const newRequest = new Request(url.toString(), {
+
+    // Server WhatsApp proxy resmi
+    url.hostname = "v.whatsapp.net";
+
+    const headers = new Headers(request.headers);
+    headers.set("Host", "v.whatsapp.net");
+    headers.set("Connection", "keep-alive");
+
+    return fetch(url.toString(), {
       method: request.method,
-      headers: request.headers,
-      body: request.body,
+      headers,
+      body: request.method !== "GET" ? request.body : undefined,
     });
-    return fetch(newRequest);
   }
 }
